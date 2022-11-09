@@ -19,7 +19,7 @@ from playsound import playsound
 
 # initialize mediapipe
 mpHands = mp.solutions.hands
-hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
+hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.9)
 mpDraw = mp.solutions.drawing_utils
 
 # Load the gesture recognizer model
@@ -33,7 +33,7 @@ count = 0
 reactionName = None
 previousClassName = None
 f.close()
-#print(classNames)
+# print(classNames)
 
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
@@ -45,8 +45,9 @@ while True:
     _, frame2 = cap.read()
     x, y, c = frame.shape
 
-    happy_logo = cv2.imread("/Users/vivekgunasekaran/Desktop/Triathlon/customer-hand-gesture-detection/images/happy.png",
-                            cv2.IMREAD_UNCHANGED)
+    happy_logo = cv2.imread(
+        "/Users/vivekgunasekaran/Desktop/Triathlon/customer-hand-gesture-detection/images/happy.png",
+        cv2.IMREAD_UNCHANGED)
     happy_logo = cv2.resize(happy_logo, (0, 0), None, 0.9, 0.9)
     x1, y1, c1 = happy_logo.shape
 
@@ -55,8 +56,9 @@ while True:
     sad_logo = cv2.resize(sad_logo, (0, 0), None, 0.9, 0.9)
     x2, y2, c2 = sad_logo.shape
 
-    awesome_logo = cv2.imread("/Users/vivekgunasekaran/Desktop/Triathlon/customer-hand-gesture-detection/images/awesome.png",
-                              cv2.IMREAD_UNCHANGED)
+    awesome_logo = cv2.imread(
+        "/Users/vivekgunasekaran/Desktop/Triathlon/customer-hand-gesture-detection/images/awesome.png",
+        cv2.IMREAD_UNCHANGED)
     awesome_logo = cv2.resize(awesome_logo, (0, 0), None, 0.9, 0.9)
     x3, y3, c3 = awesome_logo.shape
 
@@ -148,6 +150,7 @@ while True:
 
     k = cv2.waitKey(1)
 
+    # Press Escape key to close the application
     if k % 256 == 27:
         break
 
@@ -158,8 +161,10 @@ cv2.destroyAllWindows()
 
 # view the report
 df = pd.read_csv('Customer_Reactions.csv')
-df.plot(x='Reaction', y='Count', kind='bar', figsize=(15, 8))
-plt.title("Customer Ratings")
-plt.xlabel("Reactions")
-plt.ylabel("Count")
+# plt.bar(courses, values, color ='maroon',width = 0.4)
+plt.rcParams.update({'font.size': 7})
+df.plot(x='Reaction', y='Count', kind='bar', color='maroon', width=0.2, figsize=(10, 7))
+plt.title("Customer Ratings", fontsize=18)
+plt.xlabel("Reactions", fontsize=12)
+plt.ylabel("Count", fontsize=12)
 plt.show()
