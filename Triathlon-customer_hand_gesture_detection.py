@@ -35,7 +35,7 @@ reactionName = None
 previousClassName = None
 f.close()
 # print(classNames)
-
+print("CUSTOMER HAND GESTURE APPLICATION STARTED")
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
 
@@ -172,10 +172,11 @@ cv2.destroyAllWindows()
 
 # view the report
 df = pd.read_csv('Customer_Reactions.csv')
-# plt.bar(courses, values, color ='maroon',width = 0.4)
 plt.rcParams.update({'font.size': 7})
-df.plot(x='Reaction', y='Count', kind='bar', color='maroon', width=0.2, figsize=(10, 7))
+c = ['green', 'yellow', 'red']
+df.plot(x='Reaction', y='Count', kind='bar', color= c, width=0.5, figsize=(10, 7))
 plt.title("Customer Ratings", fontsize=18)
 plt.xlabel("Reactions", fontsize=12)
 plt.ylabel("Count", fontsize=12)
 plt.show()
+print("CUSTOMER HAND GESTURE APPLICATION ENDED")
