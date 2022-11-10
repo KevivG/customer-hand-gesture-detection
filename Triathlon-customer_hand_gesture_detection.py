@@ -16,6 +16,7 @@ import matplotlib
 from matplotlib import pyplot as plt
 import gtts
 from playsound import playsound
+import threading
 
 # initialize mediapipe
 mpHands = mp.solutions.hands
@@ -110,6 +111,7 @@ while True:
         if className != previousClassName:
             customerReport(className)
             previousClassName = className
+            callSpeech(className)
 
     elif emojiID == 3:
         imgResult = cvzone.overlayPNG(frame, sad_logo, [0, x2 - x])
@@ -117,6 +119,7 @@ while True:
         if className != previousClassName:
             customerReport(className)
             previousClassName = className
+            callSpeech(className)
 
     elif emojiID == 0:
         imgResult = cvzone.overlayPNG(frame, awesome_logo, [0, x3 - x])
@@ -124,10 +127,18 @@ while True:
         if className != previousClassName:
             customerReport(className)
             previousClassName = className
+            callSpeech(className)
+
     else:
         imgResult = cvzone.overlayPNG(frame2, info_logo, [1150, 0])
         cv2.imshow("Output", imgResult)
 
+    #This Method use to convert customer reaction to speech
+    def callSpeech(classNameSpeech):
+        if classNameSpeech != '':
+            tts = gtts.gTTS(classNameSpeech)
+            tts.save("hello.mp3")
+            threading.Thread(target=playsound, args=('hello.mp3',), daemon=True).start()
 
     def customerReport(reactionName):
         df = pd.read_csv('Customer_Reactions.csv')
