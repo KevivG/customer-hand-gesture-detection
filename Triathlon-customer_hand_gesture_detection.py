@@ -20,7 +20,7 @@ import threading
 
 # initialize mediapipe
 mpHands = mp.solutions.hands
-hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.9)
+hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.6)
 mpDraw = mp.solutions.drawing_utils
 
 # Load the gesture recognizer model
@@ -102,16 +102,23 @@ while True:
 
     # show the prediction on the frame
     reactionName = className
-    cv2.putText(frame, className, (650, 100), cv2.FONT_HERSHEY_TRIPLEX,
+    cv2.putText(frame, 'CUSTOMER FEEDBACK APPLICATION', (0, 90), cv2.FONT_HERSHEY_TRIPLEX,
+                2, (0, 0, 255), 2, cv2.FILLED)
+    cv2.putText(frame2, 'CUSTOMER FEEDBACK APPLICATION', (0, 90), cv2.FONT_HERSHEY_TRIPLEX,
+                2, (0, 0, 255), 2, cv2.FILLED)
+    cv2.putText(frame, className, (650, 200), cv2.FONT_HERSHEY_TRIPLEX,
                 4, (0, 255, 255), 4, cv2.FILLED)
+    cv2.putText(frame, 'Thank You For Your Feedback', (0, 1000), cv2.FONT_HERSHEY_TRIPLEX,
+                3, (255, 0, 255), 3, cv2.FILLED)
 
     if emojiID == 2:
         imgResult = cvzone.overlayPNG(frame, happy_logo, [0, x1 - x])
-        cv2.imshow("Output", imgResult)
         if className != previousClassName:
             customerReport(className)
             previousClassName = className
             callSpeech(className)
+
+        cv2.imshow("Output", imgResult)
 
     elif emojiID == 3:
         imgResult = cvzone.overlayPNG(frame, sad_logo, [0, x2 - x])
@@ -130,15 +137,17 @@ while True:
             callSpeech(className)
 
     else:
-        imgResult = cvzone.overlayPNG(frame2, info_logo, [1150, 0])
+        imgResult = cvzone.overlayPNG(frame2, info_logo, [1200, 0])
         cv2.imshow("Output", imgResult)
 
-    #This Method use to convert customer reaction to speech
+
+    # This Method use to convert customer reaction to speech
     def callSpeech(classNameSpeech):
         if classNameSpeech != '':
             tts = gtts.gTTS(classNameSpeech)
             tts.save("hello.mp3")
             threading.Thread(target=playsound, args=('hello.mp3',), daemon=True).start()
+
 
     def customerReport(reactionName):
         df = pd.read_csv('Customer_Reactions.csv')
@@ -174,7 +183,7 @@ cv2.destroyAllWindows()
 df = pd.read_csv('Customer_Reactions.csv')
 plt.rcParams.update({'font.size': 7})
 c = ['green', 'yellow', 'red']
-df.plot(x='Reaction', y='Count', kind='bar', color= c, width=0.5, figsize=(10, 7))
+df.plot(x='Reaction', y='Count', kind='bar', color=c, width=0.5, figsize=(10, 7))
 plt.title("Customer Ratings", fontsize=18)
 plt.xlabel("Reactions", fontsize=12)
 plt.ylabel("Count", fontsize=12)
